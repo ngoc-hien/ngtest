@@ -1,36 +1,80 @@
+
+<style>
+.err-message {
+    color: red;
+}
+</style>
+
 <div class="panel panel-primary">
 	<div class="panel-heading">
-		<h3 class="panel-title">Please fill out the form to register</h3>
+		<h3 class="panel-title">Please fill out the form to register</h3>		
 	</div>
 	<div class="panel-body">
 		<form class="form" role="form" name="regForm" ng-submit="submit(user)" novalidate>
-
+		
 			<div class="form-group">
-				<label for="email" class="control-label">Email:</label>
-				<input name="email" type="text" id="email" class="form-control" ng-model="user.email" />
+				<label for="email" class="control-label">* Email:</label>
+				<input name="email" type="text" id="email" class="form-control" ng-model="user.email" 
+				ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@.]{2,}$/" 
+				required />				
 			</div>
-			<div class="form-group">
-				<label for="confirmed.email" class="control-label">Confirmed email:</label>
-				<input name="confirmed.email" type="text" id="confirmed.email" class="form-control" ng-model="user.confirmed.email" />
+			<!--validate email-->
+			<div class="err-message" ng-show="regForm.email.$dirty">				
+				<p ng-show="regForm.email.$error.required">Email is required </p>
+				<p ng-show="regForm.email.$error.pattern">Invalid email address </p>				
 			</div>
 			
 			<div class="form-group">
-				<label for="password" class="control-label">Password:</label>
-				<input name="password" type="password" id="password" class="form-control" ng-model="user.password" />
+				<label for="confirmEmail" class="control-label">* Confirm email:</label>
+				<input name="confirmEmail" type="text" id="confirmEmail" class="form-control" ng-model="user.confirmEmail" 
+				my-confirmed="user.confirmEmail && user.email === user.confirmEmail" required/>
+			</div>
+			<!--validate confirmed email-->
+			<div class="err-message" ng-show="regForm.email.$valid">
+				<p ng-show="regForm.confirmEmail.$error.required">Please confirm email</p>
+				<p ng-show="regForm.confirmEmail.$error.confirmed">Email address does not match</p>
+				<!--p ng-show="user.confirmEmail && user.email !== user.confirmEmail">Email address does not match</p-->				
 			</div>
 			<div class="form-group">
-				<label for="confirmed.password" class="control-label">Password:</label>
-				<input name="confirmed.password" type="password" id="confirmed.password" class="form-control" ng-model="user.confirmed.password" />
+				<label for="password" class="control-label">* Password (minimum length of 8 characters):</label>
+				<input name="password" type="password" id="password" class="form-control" ng-model="user.password" 				  
+				ng-minlength="8" ng-pattern="/^[a-zA-Z0-9]+$/" required/>
+			</div>
+			<!--validate PASSWORD-->
+			<div class="err-message" ng-show="regForm.password.$dirty">
+				<p ng-show="regForm.password.$error.required">Password is required</p>
+				<p ng-show="regForm.password.$error.minlength">Password should contain at least 8 characters</p>
+				<p ng-show="regForm.password.$error.pattern">Password should contain a..z, A..Z, 0..9</p>
 			</div>
 			<div class="form-group">
-				<label for="ssn" class="control-label">Social number:</label>
-				<input name="snn" type="text" id="snn" class="form-control" ng-model="user.ssn" />
+				<label for="confirmPassword" class="control-label">* Confirm Password:</label>
+				<input name="confirmPassword" type="password" id="confirmPassword" class="form-control" 
+				ng-model="user.confirmPassword" 
+				my-confirmed="user.confirmPassword && user.password === user.confirmPassword" required/>
 			</div>
-
+			<!--validate CONFIRMED PASSWORD-->
+			<div class="err-message" ng-show="regForm.password.$valid">
+				<p ng-show="regForm.confirmPassword.$error.required">Please confirm password</p>
+				<p ng-show="regForm.confirmPassword.$error.confirmed">Password does not match</p>
+				<!--p ng-show="user.confirmPassword && user.password !== user.confirmPassword">Password does not match</p-->
+				<!--p ng-show="regForm.confirmPassword.$error.matched">Password does not match</p-->
+			</div>
 			<div class="form-group">
-				<button class="btn btn-primary pull-right">Register</button>
+				<label for="ssn" class="control-label">* Social number:</label>
+				<input name="ssn" type="text" id="ssn" class="form-control" ng-model="user.ssn" 
+				placeholder="yymmddxxxx" ng-pattern="/^\d{10}$/" maxlength="10" my-luhn-checked required/>
 			</div>
-
+			<!--validate SSN-->
+			<div class="err-message" ng-show="regForm.ssn.$dirty">
+				<p ng-show="regForm.ssn.$error.required">Social number is required</p>
+				<p ng-show="regForm.ssn.$error.pattern">Should be yymmddxxxx</p>
+				<p ng-show="regForm.ssn.$error.luhnchecked">Incorrect social number</p>
+				<!--p ng-show="regForm.ssn.$valid && !validSsn = validateLuhn(user.ssn)">Incorrect social number</p-->
+			</div>
+			<div class="form-group">
+				<button class="btn btn-primary pull-right" ng-disabled="!regForm.$valid">Register</button>
+			</div>
+		
 		</form>
 	</div>
 </div>
