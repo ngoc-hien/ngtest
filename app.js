@@ -7,7 +7,7 @@ var compareTo =function() {
         link: function(scope, element, attrs, ctrl) { 
 						var viewValue;
 						function valMatch(value) {						
-							var v = scope.myMatch;//scope.$parent.$eval(attrs.myMatch);//
+							var v = scope.myMatch;//scope.$parent.$eval(attrs.myMatch);
 							viewValue = value;
 							ctrl.$setValidity('matched', value && angular.equals(value, v));
 							//console.log('valMatch value: ', value);
@@ -73,9 +73,9 @@ controller('registerCtrl', function($scope, $log){
 .directive('myConfirmed', function () {
   return {
     require: 'ngModel',
-    link: function (scope, elm, attrs, ctrl) {
-      scope.$watch(attrs['myConfirmed'], function (errorMsg) {        
-        ctrl.$setValidity('confirmed', errorMsg);
+    link: function (scope, element, attrs, ctrl) {
+      scope.$watch(attrs['myConfirmed'], function (exp) {        
+        ctrl.$setValidity('confirmed', exp);
       });
     }
   };
